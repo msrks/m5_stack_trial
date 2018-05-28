@@ -1,7 +1,14 @@
 #include <M5Stack.h>
 #include "avator.h"
-//#include "const.h"
-//#include <AquesTalkTTS.h>
+#include "AquesTalkTTS.h"
+
+const char* licencekey = ""; // AquesTalk-ESP licencekey
+
+//const char* ssid       = "";        // WiFi SSID
+//const char* password   = "";        // WiFi PW
+//const char* ntpServer =  "ntp.jst.mfeed.ad.jp";
+//const long  gmtOffset_sec = 9 * 3600;
+//const int daylightOffset_sec = 0;
 
 Avator *avator;
 int count = 0;
@@ -27,13 +34,14 @@ void breath(void *args)
     delay(33);
   }
 }
+
 void drawLoop(void *args)
 {
   for(;;)
   {
-    // int level = TTS.getLevel();
-    // float f = level / 12000.0;
-    // float open = min(1.0, last + f / 2.0);
+//    int level = TTS.getLevel();
+//    float f = level / 12000.0;
+//    float open = min(1.0, last + f / 2.0);
     count += 3;
     float f0 = ((count % 360) / 180.0) * PI;
     float open = (sin(f0) + 1.0) / 2.0;
@@ -68,8 +76,8 @@ void blink(void *args)
 
 void setup()
 {
-//  int iret;
-//  iret = TTS.create(AQUESTALK_KEY);
+  int iret;
+  iret = TTS.create(licencekey);
   M5.begin();
   M5.Lcd.setBrightness(30);
   avator = new Avator();
@@ -112,18 +120,18 @@ void loop()
   M5.update();
   if (M5.BtnA.wasPressed())
   {
-    // TTS.play("do-demoi-", 90);
+     TTS.play("goanzenni-", 90);
     avator->setExpression(Neutral);
   }
   if (M5.BtnB.wasPressed())
   {
-    // TTS.play("kirai", 80);
+     TTS.play("zerosaideiko-yoshi", 90);
     avator->setExpression(expressions[idx]);
     idx = (idx + 1) % expressionsSize;
   }
   if (M5.BtnC.wasPressed())
   {
-    // TTS.play("suki", 80);
+     TTS.play("furyo-hindesu ", 80);
     avator->setExpression(Sad);
   }
   delay(125);
